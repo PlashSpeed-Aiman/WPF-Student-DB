@@ -1,0 +1,133 @@
+﻿<mah:MetroWindow x:Class="WpfApp1.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:WpfApp1"
+                 xmlns:vm="clr-namespace:WpfApp1.ViewModels"
+                 mc:Ignorable="d"
+                 Title="Student Database" Height="450" Width="Auto" MinWidth="800"
+                 Background="LightBlue"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 Name="Window1">
+
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <mah:MetroHeader Width="Auto" Grid.Row="0" FontSize="30" Margin="10,5,5,5" Grid.ColumnSpan="2">Student Database</mah:MetroHeader>
+        <TabControl Grid.Column="2" Margin="10,10,10,10" Grid.RowSpan="4" Grid.ColumnSpan="2">
+            <mah:MetroTabItem Header="General" Margin="1,0,0,0"
+                              Background="{Binding ElementName=Window1, Path=Background}"
+                              FontSize="20" 
+                              >
+              
+                <ListView Name="ListView1" ItemsSource="{Binding StudentsList}" Background="White">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="18" Text="{Binding Path=Name}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Age">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="18" Text="{Binding Path=Age}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Department">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="18" Text="{Binding Path=Dept}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="Button2" Content="Remove" Style="{DynamicResource MahApps.Styles.Button.Flat}" Command ="{Binding ElementName=ListView1,Path = DataContext.RemoveCommand2}" CommandParameter="{Binding}" Click="ButtonBase_OnClick"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+
+                </ListView>
+
+            </mah:MetroTabItem>
+            <mah:MetroTabItem Header="Query" Background="{Binding ElementName=Window1, Path=Background}">
+                <StackPanel>
+                    <TextBlock Margin="10" FontSize="18">Search By</TextBlock>
+                    <ComboBox ItemsSource="{Binding ComboList}" Name="ComboBox1" SelectedIndex="0" Margin="5" />
+                    <StackPanel Orientation="Vertical" Width="{Binding ElementName=ComboBox1, Path=ActualWidth}">
+                        <TextBox Width="{Binding ElementName=ComboBox1, Path=ActualWidth }" Text="{Binding QueryType,UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Command="{Binding Path=QueryCommand}" Key="Enter" CommandParameter="{Binding ElementName=ComboBox1, Path=SelectedValue}"></KeyBinding>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button Margin="0,5,5,5" HorizontalAlignment="Left" Width="77"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                Command="{Binding QueryCommand}"
+                                CommandParameter="{Binding ElementName=ComboBox1, Path=SelectedValue}"
+                                Content="Search">
+                            
+                        </Button>
+                    </StackPanel>
+                    <ListView Name="listView2" ItemsSource="{Binding QueryList}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}" />
+                                <GridViewColumn Header="Dept" DisplayMemberBinding="{Binding Dept}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
+            </mah:MetroTabItem>
+        </TabControl>
+        <StackPanel x:Name="StackDetailView" Grid.Row="1" Margin="10,10,5,5" Grid.ColumnSpan="2">
+            <Label 
+                FontSize="20" 
+                Content="Name" />
+            <TextBox 
+                FontSize="20" 
+                Text="{Binding Name, Mode=TwoWay}" />
+            <Label 
+                FontSize="20" 
+                Content="Age" />
+            <TextBox 
+                FontSize="20" 
+                Text="{Binding Age}" />
+            <Label 
+                FontSize="20" 
+                Content="Department" />
+            <TextBox 
+                FontSize="20" 
+                Text="{Binding Dept}" />
+            <Button 
+                    Content="Add" 
+                    Width="140" 
+                    Margin="10" 
+                    FontSize="20" 
+                    Command="{Binding AddCommand}"
+                    Style="{StaticResource MahApps.Styles.Button.Square.Accent}" />
+        </StackPanel>
+
+    </Grid>
+</mah:MetroWindow>
